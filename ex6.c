@@ -8,7 +8,7 @@
 int main(int argc, char** argv) {
   // Check there is only one argument, exit with a failure code if not
   if (argc != 2) {
-    fprintf(stderr, "You entered %d arguments, ex6 only takes 1\n", argc - 1);
+    fprintf(stderr, "You entered %d arguments, this only takes 1\n", argc - 1);
     return EXIT_FAILURE;
   }
   // Open file specified by first argument
