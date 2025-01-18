@@ -17,7 +17,7 @@ int main(int argc, char** argv) {
   // If fopen failed print an error and exit with failure code
   if (input == NULL) {
     fprintf(stderr, "The file %s ", argv[1]);
-    perror("failed to open for read");
+    perror("failed to open for reading");
     return EXIT_FAILURE;
   }
 
