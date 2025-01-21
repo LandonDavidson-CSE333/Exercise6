@@ -46,7 +46,6 @@ int main(int argc, char** argv) {
       return EXIT_FAILURE;
     }
     // Read current byte in file and store in cur_char, catch when fread doesn't return exactly one byte
-    // Should only see one or a zero meaning end of file or failed read
     if (fread(&cur_char, sizeof(char), 1, input) != 1) {
       fprintf(stderr, "Read of position %ld failed", size - 1);
       perror("");
