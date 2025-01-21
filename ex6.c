@@ -21,17 +21,38 @@ int main(int argc, char** argv) {
     return EXIT_FAILURE;
   }
 
-  // Get size of the file
-  fseek(input, 0, SEEK_END);
+  // Get size of the file, catch a nonzero return code
+  if (fseek(input, 0, SEEK_END) != 0) {
+    perror("fseek failed to SEEK_END");
+    fclose(input);
+    return EXIT_FAILURE;
+  }
   long size = ftell(input);
+  // Catch a failed ftell call
+  if (size == -1) {
+    perror("ftell failed");
+    fclose(input);
+    return EXIT_FAILURE;
+  }
   // Iterate from end to start and printf each byte
   for (; size > 0; size--) {
     // Initialize cur_char as output parameter for fread
     char cur_char;
-    // Moves cursor from end to start of file one at a time
-    fseek(input, size - 1, SEEK_SET);
-    // Read current byte in file and store in cur_char
-    fread(&cur_char, sizeof(char), 1, input);
+    // Moves cursor from end to start of file one at a time, catch a nonzero return code
+    if (fseek(input, size - 1, SEEK_SET) != 0) {
+      fprintf(stderr, "Failed to fseek to position %ld in file %s", size - 1, argv[1]);
+      perror("");
+      fclose(input);
+      return EXIT_FAILURE;
+    }
+    // Read current byte in file and store in cur_char, catch when fread doesn't return exactly one byte
+    // Should only see one or a zero meaning end of file or failed read
+    if (fread(&cur_char, sizeof(char), 1, input) != 1) {
+      fprintf(stderr, "Read of position %ld failed", size - 1);
+      perror("");
+      fclose(input);
+      return EXIT_FAILURE;
+    }
     // Print current byte stored in cur_char
     printf("%c", cur_char);
   }
